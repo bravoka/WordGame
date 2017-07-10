@@ -1,0 +1,51 @@
+{
+	"difficulty": "beginner",
+	"selections": [
+		{
+			"target": "relentless",
+			"answer": "persisting",
+			"words": [
+				"hopeless",
+				"brave",
+				"persisting",
+				"rushed" 
+			]
+		},
+		{
+			"target": "amsterdam",
+			"answer": "holland",
+			"words": [
+				"holland",
+				"germany",
+				"slovakia",
+				"prague"
+			]
+		},
+		{
+			"target": "ag",
+			"answer": "silver",
+			"words": [
+				"gold",
+				"argon",
+				"silver",
+				"arsenic"
+			]
+		},
+		{
+			"target": "candid",
+			"answer": "",
+			"words": [
+				"hidden",
+				"elusive",
+				"obtrusive",
+				"frank"
+			]
+		}
+		// { template
+		// 	"target": "",
+		// 	"answer": "",
+		// 	"words": [
+		// 	]
+		// },
+	]
+}
