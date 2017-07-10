@@ -1,0 +1,10 @@
+<h2>Score</h2>
+{{playerPoints}} / {{roundsPlayed}}
+
+<h2>This is the playboard</h2>
+{{ wordTarget }}
+<p *ngFor="let word of wordObject">
+<button [disabled]="word.IsClicked" class="choiceButton" value='{{wordObject.Solution}}' name='{{wordObject.Solution}}' (click)="[playerGuess(word.Solution),word.IsClicked=true]">
+{{word.Solution}}
+</button>
+</p>
