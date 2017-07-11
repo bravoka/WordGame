@@ -21,11 +21,11 @@
 		This is the playboard
 	</h2>
 	
-	{{ (wordTarget)[0].toUpperCase() + (wordTarget).slice(1) }}
+	{{ (currentWord.WordTarget)[0].toUpperCase() + (currentWord.WordTarget).slice(1)}}
 	
-	<p *ngFor="let word of wordObject">
-		<button [disabled]="word.IsClicked" class="{{word.Class}}" value='{{word.Solution}}' name='{{word.Solution}}' (click)="[playerGuess(word.Solution),word.IsClicked=true,word.Class='choiceButtonClosed']">
-			{{word.Solution}}
+	<p *ngFor="let word of currentWord.Options.Words; let i = index;">
+		<button [disabled]="isClickedArray[i]" class="{{buttonClass[i]}}" value='{{currentWord.Solution}}' (click)="[playerGuess(word,i)]">
+			{{word}}
 		</button>
 	</p>
 </div>

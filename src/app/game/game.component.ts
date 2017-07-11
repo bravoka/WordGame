@@ -1,148 +1,91 @@
 import { Component, OnInit } from '@angular/core';
+import { WordObject } from '../WordObject';
 
+import { WordService } from '../services/words.service';
 
 @Component({
 	selector: 'playboard',
 	templateUrl: './game.component.html',
 	styleUrls: [
 		'./game.component.css'
+	],
+	providers: [
+		WordService
 	]
 })
 export class GameComponent implements OnInit {
 
-
-	rawJson: string = `
-	{
-		"difficulty": "beginner",
-		"selections": [
-			{
-				"target": "relentless",
-				"answer": "persisting",
-				"words": [
-					"hopeless",
-					"brave",
-					"persisting",
-					"rushed" 
-				]
-			},
-			{
-				"target": "amsterdam",
-				"answer": "holland",
-				"words": [
-					"holland",
-					"germany",
-					"slovakia",
-					"prague"
-				]
-			},
-			{
-				"target": "ag",
-				"answer": "silver",
-				"words": [
-					"gold",
-					"argon",
-					"silver",
-					"arsenic"
-				]
-			},
-			{
-				"target": "candid",
-				"answer": "frank",
-				"words": [
-					"hidden",
-					"elusive",
-					"obtrusive",
-					"frank"
-				]
-			}
-		]
-	}`
-	constructor() {
-
-
-		this.jsonData = JSON.parse(this.rawJson); 
-
-		for (let i = 0; i < this.jsonData.selections.length; i++) {
-			this.shuffledSequence.push(i); // change this to raw sequence later?
-		}
-
-		// Fisher-Yates
-		let n = this.jsonData.selections.length, i, j;
-		while (n > 0) {
-			j = Math.floor(Math.random() * n);
-			n--;
-			i = this.shuffledSequence[n];
-			this.shuffledSequence[n] = this.shuffledSequence[j];
-			this.shuffledSequence[j] = i;
-		}
-
-		this.correctWord = this.jsonData.selections[this.shuffledSequence[0]].answer;
-
-		this.wordTarget = this.jsonData.selections[this.shuffledSequence[0]].target;
-
-		for (let seed of this.jsonData.selections[this.shuffledSequence[0]].words) {
-			this.wordObject.push(new WordObject(seed));
-			console.log(seed);
-		}
-	}
-
-	
-	// how does this work?
-	ngOnInit() {
-		// let initial = 2;
-		// for (let seed of this.jsonData.selections[initial].words) {
-		// 	this.wordObject.push(new WordObject(seed));
-		// 	console.log(seed);
-		// }
-	}
-
 	shuffledSequence: number[] = [];
+	
 	selectionsIteration: number = 0;
 
 	jsonData: any;
+	
 	wordTarget: string;
+	
 	correctWord: string;
 
 	playerPoints: number = 0;
+	
 	roundsPlayed: number = 0;
 
 	wordObject: WordObject[] = [];
+	
+	rawJson: string;
+
+	currentWord: WordObject;
+
+	isClickedArray: boolean[] = [ false, false, false, false];
+
+	buttonClass: string[] = [ "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen" ]
+
+	constructor(private wordService: WordService) { }
+
+	ngOnInit(): void {
+		this.getWordsObject();
+		this.currentWord = this.wordObject[0];
+		console.log(this.currentWord);
+	}
+
+	getWordsObject(): void {
+		this.wordObject = this.wordService.getWordsObject();
+	}
 
 	/// TODO: Make wordArray into a wordObject so that it can have word.Text and word.AlreadyClicked
-	playerGuess(guess: string): void {
-		if (guess == this.correctWord) {
+	playerGuess(guess: string, index: number): void {
+		if (guess == this.currentWord.Solution) {
 			this.playerPoints++;
 			this.roundsPlayed++;
 			this.selectionsIteration++;
-			if (this.selectionsIteration != this.shuffledSequence.length) {
+			if (this.selectionsIteration != this.wordObject.length) {
 				this.newRound();
 				return;
 			}
 			else {
 				alert("Game over");
+				// Need to reset everything or go to a new page after this.
 			}
 		}
 		else {
 			this.roundsPlayed++;
 			console.log("Incorrect guess: " + guess);
-			
-			// this.newRound();
-			// this.isClickedOnce = true;
+			this.isClickedArray[index] = true;
+			this.buttonClass[index]='choiceButtonClosed';
 			return
 		} 
 	} 
 
 	newRound(): void {
-		this.correctWord = this.jsonData.selections[this.shuffledSequence[this.selectionsIteration]].answer;
-		this.wordTarget = this.jsonData.selections[this.shuffledSequence[this.selectionsIteration]].target;
-		this.wordObject = [];
+		
 
-		for (let i of this.jsonData.selections[this.shuffledSequence[this.selectionsIteration]].words) {
-			this.wordObject.push(new WordObject(i));
-		}
+		this.isClickedArray = [ false, false, false, false ];
 
+		this.buttonClass = [ "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen" ];
+
+		this.currentWord = this.wordObject[this.selectionsIteration];
+	
 	}
-	active: boolean = false;
+	active: boolean = true;
 	timeStart: number = 5;
 	refresh: number = 1000;
 	timeFinish: number = 0;
@@ -157,9 +100,8 @@ export class GameComponent implements OnInit {
 		this.active = true;
 		let _myInterval: any;
 		_myInterval = setInterval(() => { 
-			// console.log("blah" + _myInterval);
+
 			this.timeStart > this.timeFinish ? this.timeStart-- : clearInterval(_myInterval);
-			// console.log("blah" + _myInterval);
 
 		}, 1000);
 	}
@@ -174,14 +116,4 @@ export class GameComponent implements OnInit {
 	// 		return true;
 	// 	} 
 	// } 
-}
-
-class WordObject {
-	Solution: string;
-	IsClicked: boolean = false;
-	Class: string = "choiceButtonOpen";
-
-	constructor(solution: string) {
-		this.Solution = solution;
-	}
 }
