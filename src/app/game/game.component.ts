@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 
-
 @Component({
 	selector: 'playboard',
 	templateUrl: './game.component.html',
@@ -10,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
 	]
 })
 export class GameComponent implements OnInit {
+
+
 	rawJson: string = `
 	{
 		"difficulty": "beginner",
@@ -57,6 +58,8 @@ export class GameComponent implements OnInit {
 		]
 	}`
 	constructor() {
+
+
 		this.jsonData = JSON.parse(this.rawJson); 
 
 		for (let i = 0; i < this.jsonData.selections.length; i++) {
@@ -83,6 +86,7 @@ export class GameComponent implements OnInit {
 		}
 	}
 
+	
 	// how does this work?
 	ngOnInit() {
 		// let initial = 2;
@@ -138,8 +142,32 @@ export class GameComponent implements OnInit {
 		}
 
 	}
+	active: boolean = false;
+	timeStart: number = 5;
+	refresh: number = 1000;
+	timeFinish: number = 0;
+	resetTime: number = 5;
 
+	public DoWork(): void {
+		this.timeStart--;
+		// this.active = true;
+	}
 
+	SimpleCountdown(): void {
+		this.active = true;
+		let _myInterval: any;
+		_myInterval = setInterval(() => { 
+			// console.log("blah" + _myInterval);
+			this.timeStart > this.timeFinish ? this.timeStart-- : clearInterval(_myInterval);
+			// console.log("blah" + _myInterval);
+
+		}, 1000);
+	}
+
+	Reset(): void {
+		this.timeStart = this.resetTime;
+		return;
+	}
 
 	// playerGuess(guess: string): boolean {
 	// 	if (this.wordArray.indexOf(correctWord) > -1) {

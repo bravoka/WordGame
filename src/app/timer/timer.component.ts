@@ -11,28 +11,28 @@ import { Component } from '@angular/core';
 
 })
 export class TimerComponent {
-	timeStart: number = 5;
-	refresh: number = 1000;
-	timeFinish: number = 0;
-	resetTime: number = 5;
+	// timeStart: number = 5;
+	// refresh: number = 1000;
+	// timeFinish: number = 0;
+	// resetTime: number = 5;
 
-	DoWork(): void {
-		this.timeStart--;
-	}
+	// public DoWork(): void {
+	// 	this.timeStart--;
+	// }
 
-	SimpleCountdown(): void {
-		let _myInterval: any;
-		_myInterval = setInterval(() => { 
-			// console.log("blah" + _myInterval);
-			this.timeStart > this.timeFinish ? this.timeStart-- : clearInterval(_myInterval);
-			// console.log("blah" + _myInterval);
+	// SimpleCountdown(): void {
+	// 	let _myInterval: any;
+	// 	_myInterval = setInterval(() => { 
+	// 		// console.log("blah" + _myInterval);
+	// 		this.timeStart > this.timeFinish ? this.timeStart-- : clearInterval(_myInterval);
+	// 		// console.log("blah" + _myInterval);
 
-		}, 1000);
-	}
+	// 	}, 1000);
+	// }
 
-	Reset(): void {
-		this.timeStart = this.resetTime;
-		return;
-	}
+	// Reset(): void {
+	// 	this.timeStart = this.resetTime;
+	// 	return;
+	// }
 }
 
