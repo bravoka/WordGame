@@ -121,6 +121,7 @@ export class GameComponent implements OnInit {
 		else {
 			this.roundsPlayed++;
 			console.log("Incorrect guess: " + guess);
+			
 			// this.newRound();
 			// this.isClickedOnce = true;
 			return
@@ -150,9 +151,9 @@ export class GameComponent implements OnInit {
 class WordObject {
 	Solution: string;
 	IsClicked: boolean = false;
+	Class: string = "choiceButtonOpen";
 
 	constructor(solution: string) {
 		this.Solution = solution;
-		this.IsClicked = false;
 	}
 }
