@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
 		'./game-results.component.css'
 	]
 })
-export class GameResults {
+export class GameResultsComponent {
 
 }

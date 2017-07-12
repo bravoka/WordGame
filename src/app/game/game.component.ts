@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WordObject } from '../WordObject';
-
+import { Router } from '@angular/router';
 import { WordService } from '../services/words.service';
 
 @Component({
@@ -14,6 +14,10 @@ import { WordService } from '../services/words.service';
 	]
 })
 export class GameComponent implements OnInit {
+
+	constructor(
+		private wordService: WordService, 
+		private router: Router) { }
 
 	shuffledSequence: number[] = [];
 	
@@ -39,7 +43,7 @@ export class GameComponent implements OnInit {
 
 	buttonClass: string[] = [ "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen" ]
 
-	constructor(private wordService: WordService) { }
+
 
 	ngOnInit(): void {
 		this.getWordsObject();
@@ -57,12 +61,13 @@ export class GameComponent implements OnInit {
 			this.playerPoints++;
 			this.roundsPlayed++;
 			this.selectionsIteration++;
-			if (this.selectionsIteration != this.wordObject.length) {
-				this.newRound();
-				return;
+			if (this.selectionsIteration == this.wordObject.length) {
+
+				this.ResultsView("Good job!");
 			}
 			else {
-				alert("Game over");
+				this.newRound();
+				return;
 				// Need to reset everything or go to a new page after this.
 			}
 		}
@@ -71,9 +76,22 @@ export class GameComponent implements OnInit {
 			console.log("Incorrect guess: " + guess);
 			this.isClickedArray[index] = true;
 			this.buttonClass[index]='choiceButtonClosed';
-			return
+			
+			if (this.selectionsIteration == this.wordObject.length) {
+				alert("Game over");
+				this.ResultsView("Nice try!");
+				return;
+			}
+
+			return;
 		} 
 	} 
+
+	ResultsView(message: string): void {
+		alert("Game over. " + message);
+		this.router.navigate(['/view-results']);
+
+	}
 
 	newRound(): void {
 		
@@ -85,7 +103,7 @@ export class GameComponent implements OnInit {
 		this.currentWord = this.wordObject[this.selectionsIteration];
 	
 	}
-	active: boolean = true;
+	active: boolean = false;
 	timeStart: number = 5;
 	refresh: number = 1000;
 	timeFinish: number = 0;
@@ -100,9 +118,12 @@ export class GameComponent implements OnInit {
 		this.active = true;
 		let _myInterval: any;
 		_myInterval = setInterval(() => { 
-
+			if (this.timeStart == 0) {
+				this.ResultsView("Time Expired");
+			}
 			this.timeStart > this.timeFinish ? this.timeStart-- : clearInterval(_myInterval);
 
+			 
 		}, 1000);
 	}
 
