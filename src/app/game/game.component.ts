@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WordObject } from '../WordObject';
 import { Router } from '@angular/router';
 import { WordService } from '../services/words.service';
@@ -13,7 +13,7 @@ import { WordService } from '../services/words.service';
 		WordService
 	]
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private wordService: WordService, 
@@ -104,10 +104,12 @@ export class GameComponent implements OnInit {
 	
 	}
 	active: boolean = false;
-	timeStart: number = 5;
+	timeStart: number = 10;
 	refresh: number = 1000;
 	timeFinish: number = 0;
-	resetTime: number = 5;
+	resetTime: number = 10;
+
+	_myInterval: any;
 
 	public DoWork(): void {
 		this.timeStart--;
@@ -116,12 +118,12 @@ export class GameComponent implements OnInit {
 
 	SimpleCountdown(): void {
 		this.active = true;
-		let _myInterval: any;
-		_myInterval = setInterval(() => { 
+		// let _myInterval: any;
+		this._myInterval = setInterval(() => { 
 			if (this.timeStart == 0) {
 				this.ResultsView("Time Expired");
 			}
-			this.timeStart > this.timeFinish ? this.timeStart-- : clearInterval(_myInterval);
+			this.timeStart > this.timeFinish ? this.timeStart-- : clearInterval(this._myInterval);
 
 			 
 		}, 1000);
@@ -132,9 +134,7 @@ export class GameComponent implements OnInit {
 		return;
 	}
 
-	// playerGuess(guess: string): boolean {
-	// 	if (this.wordArray.indexOf(correctWord) > -1) {
-	// 		return true;
-	// 	} 
-	// } 
+	ngOnDestroy() {
+		clearInterval(this._myInterval);
+	}
 }
