@@ -43,7 +43,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
 	buttonClass: string[] = [ "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen", "choiceButtonOpen" ]
 
+	resultMessage: string;
 
+	resultIcon: string ;
 
 	ngOnInit(): void {
 		this.getWordsObject();
@@ -58,6 +60,8 @@ export class GameComponent implements OnInit, OnDestroy {
 	/// TODO: Make wordArray into a wordObject so that it can have word.Text and word.AlreadyClicked
 	playerGuess(guess: string, index: number): void {
 		if (guess == this.currentWord.Solution) {
+			this.resultIcon = "https://openclipart.org/download/257462/Checkmark.svg";
+			this.resultMessage = "You guessed right!";
 			this.playerPoints++;
 			this.roundsPlayed++;
 			this.selectionsIteration++;
@@ -66,17 +70,19 @@ export class GameComponent implements OnInit, OnDestroy {
 				this.ResultsView("Good job!");
 			}
 			else {
+				
 				this.newRound();
 				return;
 				// Need to reset everything or go to a new page after this.
 			}
 		}
 		else {
+			this.resultIcon = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-xxl.png";
 			this.roundsPlayed++;
 			console.log("Incorrect guess: " + guess);
 			this.isClickedArray[index] = true;
 			this.buttonClass[index]='choiceButtonClosed';
-			
+			this.resultMessage = `${guess} was incorrect`;
 			if (this.selectionsIteration == this.wordObject.length) {
 				alert("Game over");
 				this.ResultsView("Nice try!");
@@ -89,6 +95,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
 	ResultsView(message: string): void {
 		alert("Game over. " + message);
+		// WRITE RESULTS TO SERVER
+		// Time elapsed, correct answers, incorrect answers
+		// Write words played, and whether they were correct or incorrect
 		this.router.navigate(['/view-results']);
 
 	}

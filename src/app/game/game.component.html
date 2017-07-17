@@ -28,4 +28,8 @@
 			{{word}}
 		</button>
 	</p>
+	<p *ngIf="resultMessage">
+	<img src={{resultIcon}} height=40px width=40px />
+	{{ resultMessage }}
+	</p>
 </div>
